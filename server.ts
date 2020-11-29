@@ -129,6 +129,8 @@ export async function start(appDir: string, port: number, isDev = false, reload 
                         }
                     }
 
+                    console.log('hi')
+
                     // ssr
                     const [status, html] = await project.getPageHtml({ pathname, search: url.search })
                     resp.status(status).send(html, 'text/html; charset=utf-8')

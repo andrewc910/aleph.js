@@ -8,6 +8,7 @@ import { EventEmitter } from "./events.ts";
 import { ensureTextFile, existsDirSync, existsFileSync } from "./fs.ts";
 import { createHtml } from "./html.ts";
 import log from "./log.ts";
+import { Pipeline } from "./pipes/pipeline.ts";
 import { ProjectConfig } from "./project_config.ts";
 import { getPagePath, RouteModule, Routing } from "./routing.ts";
 import {
@@ -79,6 +80,7 @@ interface RenderResult {
 export class Project {
   readonly config: ProjectConfig;
   readonly ready: Promise<void>;
+  pipeline: Pipeline;
 
   #modules: Map<string, Module> = new Map();
   #routing: Routing = new Routing();
@@ -96,9 +98,13 @@ export class Project {
   ) {
     const config = new ProjectConfig(appDir, mode);
     this.config = config;
+    this.pipeline = new Pipeline([]);
+
     this.ready = (async () => {
-      const t = performance.now();
+      const time = performance.now();
       await config.loadConfig();
+      // update pipeline
+      this.pipeline = new Pipeline(config.pipes.web);
       // update routing
       this.#routing = new Routing(
         [],
@@ -107,7 +113,9 @@ export class Project {
         config.locales,
       );
       await this._init(reload);
-      log.debug("init project in " + Math.round(performance.now() - t) + "ms");
+      log.debug(
+        `init project in ${Math.round(performance.now() - time)} ms`,
+      );
     })();
   }
 
@@ -717,7 +725,7 @@ export class Project {
         const mod = await this._compile(
           "/api" + util.trimPrefix(p, apiDir).split("\\").join("/"),
         );
-        this.#apiRouting.update(this._getRouteModule(mod));
+        this.#apiRouting.update(this._getRouteModule(mod), "api");
       }
     }
 

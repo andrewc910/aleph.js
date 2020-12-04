@@ -49,6 +49,7 @@ export async function start(
 
           // serve APIs
           if (pathname.startsWith("/api/")) {
+            project.pipeline.call(req);
             project.callAPI(req, { pathname, search: url.search });
             continue;
           }
@@ -61,6 +62,7 @@ export async function start(
           }
 
           // ssr
+          project.pipeline.call(req);
           const [status, html] = await project.getPageHtml(
             { pathname, search: url.search },
           );

@@ -1,5 +1,6 @@
 import { existsDirSync, existsFileSync } from "./fs.ts";
 import log from "./log.ts";
+import { BasePipe } from "./pipes/base_pipe.ts";
 import { Routing } from "./routing.ts";
 import { path } from "./std.ts";
 import { Plugin, SSROptions } from "./types.ts";
@@ -37,6 +38,11 @@ export class ProjectConfig {
 
   __file?: string;
 
+  pipes: {
+    web: Array<BasePipe>;
+    api: Array<BasePipe>;
+  };
+
   readonly appRoot: string;
   readonly mode: "development" | "production";
 
@@ -73,6 +79,10 @@ export class ProjectConfig {
       plugins: [
         "autoprefixer",
       ],
+    };
+    this.pipes = {
+      web: [],
+      api: [],
     };
   }
 
@@ -146,6 +156,7 @@ export class ProjectConfig {
       env,
       plugins,
       postcss,
+      pipelines,
     } = config;
     if (util.isNEString(srcDir)) {
       Object.assign(this, { srcDir: util.cleanPath(srcDir) });
@@ -230,6 +241,18 @@ export class ProjectConfig {
       } catch (e) {
         log.warn("bad postcss.config.json", e.message);
       }
+    }
+
+    if (util.isPlainObject(pipelines)) {
+      const pipes: Record<string, Array<BasePipe>> = {};
+      Object.keys(pipelines).forEach((pipeline) => {
+        if (util.isArray(pipelines[pipeline])) {
+          console.log(`${pipeline} passed`);
+          pipes[pipeline] = pipelines[pipeline];
+        }
+      });
+
+      Object.assign(this, { pipes });
     }
   }
 

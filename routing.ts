@@ -78,7 +78,7 @@ export class Routing {
     let targetRoutes = this._routes;
 
     this._lookup((routePath) => {
-      const path = routePath.map((r) => r.path).join("");
+      const path = routePath.map((route) => route.path).join("");
       const route = routePath[routePath.length - 1];
       const parentRoute = routePath[routePath.length - 2];
 

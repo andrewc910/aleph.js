@@ -133,6 +133,7 @@ export async function start(appDir: string, port: number, isDev = false, reload 
                     const [status, html] = await project.getPageHtml({ pathname, search: url.search })
                     resp.status(status).send(html, 'text/html; charset=utf-8')
                 } catch (err) {
+                    // application.router.internalServerError(resp)
                     resp.status(500).send(createHtml({
                         lang: 'en',
                         head: ['<title>500 - internal server error</title>'],

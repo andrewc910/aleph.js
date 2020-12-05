@@ -1,29 +1,18 @@
 {
-    "files.eol": "\n",
-    "files.trimTrailingWhitespace": true,
-    "[javascript]": {
-        "editor.defaultFormatter": "vscode.typescript-language-features"
-    },
+    // "files.eol": "\n",
+    // "files.trimTrailingWhitespace": true,
     "[typescript]": {
-        "editor.defaultFormatter": "vscode.typescript-language-features",
-        "editor.formatOnSave": true,
-        "editor.codeActionsOnSave": {
-            "source.organizeImports": true,
-        }
-    },
-    "[typescriptreact]": {
-        "editor.defaultFormatter": "vscode.typescript-language-features",
-        "editor.formatOnSave": true,
-        "editor.codeActionsOnSave": {
-            "source.organizeImports": true,
-        }
-    },
-    "[rust]": {
-        "editor.defaultFormatter": "rust-lang.rust",
-        "editor.formatOnSave": true,
-    },
+        "editor.defaultFormatter": "denoland.vscode-deno",
+      },
+      "[typescriptreact]": {
+        "editor.defaultFormatter": "denoland.vscode-deno",
+      },
+    // "[rust]": {
+    //     "editor.defaultFormatter": "rust-lang.rust",
+    //     "editor.formatOnSave": true,
+    // },
     "deno.enable": true,
     "deno.unstable": true,
     "deno.import_map": "./import_map.json",
-    "deno.import_intellisense_autodiscovery": false
+    "deno.import_intellisense_autodiscovery": true
 }
